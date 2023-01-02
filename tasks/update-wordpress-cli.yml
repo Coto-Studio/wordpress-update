@@ -1,0 +1,14 @@
+---
+- name: Make sure ansible has correct permisions
+  file:
+    path: /var/www/.ansible/tmp
+    owner: root
+    group: www-data
+    mode: 0774
+    state: directory
+
+- name: Update wordpress-cli
+  command:
+    cmd: wp cli update --yes --color
+  register: wp_cli_update
+  changed_when: "'Success: WP-CLI is at the latest version.' not in wp_cli_update.stdout"

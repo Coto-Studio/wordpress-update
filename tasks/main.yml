@@ -1,2 +1,16 @@
 ---
 # tasks file for wordpress-update
+- name: Check for wordpress-cli
+  file:
+    path: /usr/local/bin/wp
+  register: wp_cli_installed
+  ignore_errors: true
+
+- name: Update wordpress-cli
+  import_tasks: ../tasks/update-wordpress-cli.yml
+  when: wp_installed.failed == false
+
+- name: Update wordpress installs
+  when: wp_installed.failed == false
+  include_tasks: ../tasks/upgrade-wordpress.yml
+  loop: "{{ wordpress_installs }}"
