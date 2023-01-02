@@ -14,3 +14,5 @@
   when: wp_cli_installed.failed == false
   include_tasks: ../tasks/upgrade-wordpress.yml
   loop: "{{ wordpress_installs }}"
+  loop_control:
+    label: "{{ item.name }}"
