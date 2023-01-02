@@ -1,47 +1,47 @@
 ---
-- name: "Update wordpress themes: {{ item }}"
+- name: "Update wordpress themes: {{ item.name }}"
   become: true
   become_user: "{{ wordpress_user }}"
   command:
-    chdir: "{{ item }}"
+    chdir: "{{ item.path }}"
     cmd: wp theme update --all
   register: wp_theme_update
   changed_when: "'Success: Theme already updated.' not in  wp_theme_update.stdout"
   ignore_errors: true
 
-- name: "Update wordpress plugins: {{ item }}"
+- name: "Update wordpress plugins: {{ item.name }}"
   become: true
   become_user: "{{ wordpress_user }}"
   command:
-    chdir: "{{ item }}"
+    chdir: "{{ item.path }}"
     cmd: wp plugin update --all
   register: wp_plugin_update
   changed_when: "'Success: Plugin already updated.' not in  wp_plugin_update.stdout"
 
-- name: "Update wordpress core: {{ item }}"
+- name: "Update wordpress core: {{ item.name }}"
   become: true
   become_user: "{{ wordpress_user }}"
   command:
-    chdir: "{{ item }}"
+    chdir: "{{ item.path }}"
     cmd: wp core update
   register: wp_core_update
   changed_when: "'Success: WordPress is up to date.' not in  wp_core_update.stdout"
 
-- name: "Update wordpress db: {{ item }}"
+- name: "Update wordpress db: {{ item.name }}"
   become: true
   become_user: "{{ wordpress_user }}"
   command:
-    chdir: "{{ item }}"
+    chdir: "{{ item.path }}"
     cmd: wp core update-db
   register: wp_db_update
   changed_when: "'WordPress database already at latest db' not in  wp_db_update.stdout"
   when: wp_core_update.changed
 
-- name: "Update wordpress db network: {{ item }}"
+- name: "Update wordpress db network: {{ item.name }}"
   become: true
   become_user: "{{ wordpress_user }}"
   command:
-    chdir: "{{ item }}"
+    chdir: "{{ item.path }}"
     cmd: wp core update-db --network
   register: wp_db_nextwork_update
   changed_when: "'WordPress database already at latest db' not in  wp_db_nextwork_update.stdout"
